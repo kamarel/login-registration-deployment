@@ -15,6 +15,7 @@ public class LoginRegistrationsApplication {
 	}
 
 	public static void main(String[] args) {
+		System.setProperty("eureka.client.service-url.defaultZone", "https://protective-determination-production.up.railway.app/eureka/");
 		SpringApplication.run(LoginRegistrationsApplication.class, args);
 	}
 
