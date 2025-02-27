@@ -10,7 +10,7 @@ public class LoginResponse {
     // Add other fields for user data if needed
     private Object userData;
 
-    public LoginResponse() {
+    public LoginResponse(boolean b, String s) {
     }
 
     public LoginResponse(String message) {

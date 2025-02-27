@@ -4,7 +4,6 @@ import com.mykcc.login_registrations.Entity.LoginRequest;
 import com.mykcc.login_registrations.Entity.LoginResponse;
 import com.mykcc.login_registrations.Entity.RegistrastionResponse;
 import com.mykcc.login_registrations.Entity.Users;
-import com.mykcc.login_registrations.Security.JwtAuthenticationResponse;
 import com.mykcc.login_registrations.Security.JwtTokenProvider;
 import com.mykcc.login_registrations.Service.CustomUserDetailsService;
 import com.mykcc.login_registrations.Service.EmailService;
@@ -55,6 +54,69 @@ public class UserController {
     @Autowired
     private JwtTokenProvider tokenProvider;
 
+
+
+
+
+    @Operation(
+            summary = "Log in Endpoint",
+            description = "This Endpoint allow the user to log in into the website"
+    )
+
+    @ApiResponse(
+            responseCode = "201",
+            description = "HTTP Status 201 OK"
+    )
+
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            // Load the user from the database
+            Users user = userDetailsService.findByEmail(loginRequest.getEmail());
+
+            // If the user doesn't exist, return an error
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(new LoginResponse(false, "Invalid credentials"));
+            }
+
+            // Proceed with authentication
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()
+                    )
+            );
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // Generate JWT token
+            String jwt = tokenProvider.generateToken(authentication);
+
+            // Create a LoginResponse with token and success flag
+            LoginResponse response = new LoginResponse(false, "Email not verified. Please verify your email first.");
+            response.setSuccess(true);
+            response.setMessage("Login successful");
+            response.setUserData(jwt); // You can rename userData to 'token' if preferred
+
+            return ResponseEntity.ok(response);
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new LoginResponse(false, "Email not verified. Please verify your email first."));
+        } catch (Exception e) {
+            // Handle other potential exceptions (e.g., database errors)
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new LoginResponse(false, "An error occurred during login"));
+        }
+    }
+
+
+
+
+
+
+
     @DeleteMapping("/login/users/delete/{id}")
     public ResponseEntity<String>deleteUser(@PathVariable Long id) {
         userDetailsService.deleteUser(id);
@@ -88,61 +150,6 @@ public class UserController {
         }
     }
 
-
-
-
-
-
-
-    @Operation(
-            summary = "Log in Endpoint",
-            description = "This Endpoint allow the user to log in into the website"
-    )
-
-    @ApiResponse(
-            responseCode = "201",
-            description = "HTTP Status 201 OK"
-    )
-
-    //@CrossOrigin(origins = "http://localhost:4200")
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        try {
-            // Load the user from the database
-            Users user = userDetailsService.findByEmail(loginRequest.getEmail());
-
-            // If the user doesn't exist, return an error
-            if (user == null) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new LoginResponse("Invalid credentials"));
-            }
-
-            // If passwords match, proceed with authentication
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginRequest.getEmail(), // Use email here
-                            loginRequest.getPassword()
-                    )
-            );
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            // Generate JWT token
-            String jwt = tokenProvider.generateToken(authentication);
-
-            // Create a LoginResponse object with success flag and token
-            JwtAuthenticationResponse response = new JwtAuthenticationResponse(jwt);
-
-
-            return ResponseEntity.ok(response);
-        } catch (UsernameNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new LoginResponse("Email not verified. Please verify your email first."));
-        } catch (Exception e) {
-            // Handle other potential exceptions (e.g., database errors)
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new LoginResponse("An error occurred during login"));
-        }
-    }
 
 
 
