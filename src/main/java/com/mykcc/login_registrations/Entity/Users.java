@@ -34,6 +34,10 @@ public class Users {
     @Column(unique = true)
     private String email;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role")
+    private Set<String> roles = new HashSet<>();
 
     private LocalDateTime confirmationCodeExpiration;
     private boolean emailVerified;
@@ -42,10 +46,7 @@ public class Users {
 
 
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role")
-    private Set<String> roles = new HashSet<>();
+
 
 
 
