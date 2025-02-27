@@ -38,7 +38,9 @@ import java.util.Random;
 )
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
+
 public class UserController {
 
     @Autowired
