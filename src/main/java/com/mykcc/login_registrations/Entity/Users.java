@@ -23,12 +23,10 @@ public class Users {
     private String firstName;
     private String lastName;
 
-    // Enforce password complexity and non-blank
     @NotBlank(message = "Password cannot be empty")
     @Size(min = 8, message = "Password must be at least 8 characters long")
     private String password;
 
-    // Ensure email is valid and unique
     @NotBlank(message = "Email cannot be empty")
     @Email(message = "Email should be valid")
     @Column(unique = true)
@@ -44,12 +42,9 @@ public class Users {
     private boolean registered;
     private String confirmationCode;
 
+    // Relationship with password reset tokens
 
-
-
-
-
-
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Set<PasswordResetToken> passwordResetTokens;
 
 }
