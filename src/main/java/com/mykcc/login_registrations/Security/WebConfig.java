@@ -16,7 +16,7 @@ public class WebConfig {
         config.setAllowCredentials(true);
 
         // Allow only the frontend origin
-        config.setAllowedOrigins(List.of("http://localhost:4200"));
+        config.setAllowedOrigins(List.of("https://front-end-my-kcc-deployment.vercel.app"));
 
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");

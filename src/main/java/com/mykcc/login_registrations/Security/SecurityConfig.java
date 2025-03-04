@@ -32,6 +32,8 @@ public class SecurityConfig {
                 .cors()
                 .and()
                 .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable())
+
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // No sessions will be created or used
                 )

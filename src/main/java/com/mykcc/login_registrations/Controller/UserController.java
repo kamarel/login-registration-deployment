@@ -37,7 +37,7 @@ import java.util.Random;
 )
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://front-end-my-kcc-deployment.vercel.app")
 
 
 public class UserController {
