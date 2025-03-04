@@ -34,4 +34,3 @@ public class JwtAuthenticationResponse {
         this.message = message;
     }
 }
-

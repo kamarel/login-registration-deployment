@@ -4,7 +4,6 @@ package com.mykcc.login_registrations.Controller;
 import com.mykcc.login_registrations.Entity.Users;
 import com.mykcc.login_registrations.Repository.UserRepository;
 import com.mykcc.login_registrations.Service.PasswordResetService;
-import com.mykcc.login_registrations.Service.PasswordResetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PasswordResetController {
 
     @Autowired
-   private UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private PasswordResetService passwordResetService;
